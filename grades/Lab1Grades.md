@@ -1,5 +1,7 @@
 # Lab 1 Grades - kpbarry7
 
+* Regraded - 5/6
+
 ## Total Score - 63 / 100
 
 * Part 1 - Survey - 9 / 9
