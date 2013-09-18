@@ -14,7 +14,7 @@ hello.sayHi
 
 # Part2: Palindromes/Counting
 def palindrome?(string)
-	string = string.downcase.gsub(/\W/,'')
+	string = string.downcase.gsub(/\W/,'') #/\W/ = any non-word character
 	string == string.reverse
 end
 puts palindrome?("A man, a plan, a canal -- Panama")
@@ -24,7 +24,7 @@ puts palindrome?("Abracadabra")
 
 def count_words(string)
 	counts = Hash.new(0)
-	new_string = string.split(/\W+/)
+	new_string = string.split(/\W+/) #Split words up into groups
 	new_string.each do |word|
 		new_word = word.gsub(/\W/, '').downcase
 		counts[new_word] = counts[new_word] + 1
@@ -39,7 +39,7 @@ class WrongNumberOfPlayersError < StandardError ; end
 class NoSuchStrategyError < StandardError ; end
 
 def winner?(game)
-	return (game[0][1] + game[1][1]) =~ /rs|sp|pr|rr|ss|pp/
+	return (game[0][1] + game[1][1]) =~ /rs|sp|pr|rr|ss|pp/i
 end
 def rps_game_winner(game)
 	rps = ["r","p","s"]
@@ -56,28 +56,37 @@ def rps_game_winner(game)
 end
  
 def rps_tournament_winner(game)
-	if game[0][1].class==String
+	if game[0][1].class == String
 		rps_game_winner(game)
 	else
-		rps1 =rps_tournament_winner(game[0])
-		rps2 =rps_tournament_winner(game[1])
-		rps_tournament_winner([rps1, rps2])
+		rps1 = rps_tournament_winner(game[0])
+		rps2 = rps_tournament_winner(game[1])
+		rps_game_winner([rps1, rps2])
 	end
 end
 
 puts rps_game_winner([["Armando", "P"], ["Dave", "S"]])
-puts rps_tournament_winner([[[["Armando", "P"], ["Dave", "S"]], [["Richard", "R"], ["Michael", "S"]]], [[["Allen", "S"], ["Omer", "P"]], [["David E.", "R"], ["Richard X.", "P"]]]])
+puts rps_tournament_winner([
+    [
+        [ ["Armando", "P"], ["Dave", "S"] ],
+        [ ["Richard", "R"],  ["Michael", "S"] ],
+    ],
+    [
+        [ ["Allen", "S"], ["Omer", "P"] ],
+        [ ["David E.", "R"], ["Richard X.", "P"] ]
+    ]
+])
 
 #Part 4
 def combine_anagrams(words)
-  words.group_by{|w| w.downcase.chars.sort.to_s}.values
+	words.group_by{|w| w.downcase.chars.sort.to_s}.values
 end
 
 puts combine_anagrams(['cars', 'for', 'potatoes', 'racs', 'four', 'scar', 'creams', 'scream'])
 
 #Part 5
 class Dessert
-attr_accessor :name, :calories
+attr_accessor :name, :calories # creates getters and setters 
 	def initialize(name, calories)
 		@name = name
 		@calories = calories
@@ -106,24 +115,26 @@ attr_accessor :flavor
 end
 
 #Part 6
+#@@ = class variable
+#@ = instance variable
 class Class
     def attr_accessor_with_history(attr_name)
-        attr_name = attr_name.to_s       # make sure it's a string
-        attr_reader attr_name            # create the attribute's getter
+        attr_name = attr_name.to_s # make sure it's a string
+        attr_reader attr_name # create the attribute's getter
         attr_reader attr_name+"_history" # create bar_history getter
-		class_eval %Q{
-			def #{attr_name}=(attr_name)
-				@attr_name = attr_name                                                         
-				if @#{attr_name}_history then
-					@#{attr_name}_history << attr_name
-				else
-					@#{attr_name}_history = Array.new
-					@#{attr_name}_history << nil
-					@#{attr_name}_history << attr_name
-				end                                            
-			end
-			}
-	end
+class_eval %Q{
+def #{attr_name}=(attr_name)
+@attr_name = attr_name
+if @#{attr_name}_history then
+@#{attr_name}_history << attr_name
+else
+@#{attr_name}_history = Array.new
+@#{attr_name}_history << nil
+@#{attr_name}_history << attr_name
+end
+end
+}
+end
 end
 
 class Foo
@@ -141,9 +152,10 @@ class Numeric
 	def method_missing(method_id)
 		singular_currency = method_id.to_s.gsub( /s$/, '')
 		if @@currencies.has_key?(singular_currency)
-			self / @@currencies[singular_currency]
+			self * @@currencies[singular_currency]
 		else
-			super
+			super #Passes the original method call and its original 
+				  #arguments intact up the inheritance chain
 		end
 	end
 	
@@ -157,7 +169,10 @@ class Numeric
 	end
 end
 
+puts 5.euros.in(:rupees)
 puts 5.dollars.in(:rupees)
+puts 100.yen.in(:dollars)
+p 10.euros.in(:dollars)
 
 class String
 def palindrome?
@@ -174,12 +189,14 @@ def palindrome?
 	end
 end
 
+p "racecar".palindrome?
+p "colorado".palindrome?
 
 
 #Part 8
 class CartesianProduct
     include Enumerable
-    def initialize a,b
+    def initialize a, b
 		@a = a
 		@b = b
 	end
