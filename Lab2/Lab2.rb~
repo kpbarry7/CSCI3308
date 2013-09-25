@@ -1,0 +1,25 @@
+# Part1: Hello World
+class HelloWorldClass
+    def initialize(name)
+       @name = name.capitalize
+    end
+    def sayHi
+        puts "Hello #{@name}!"
+    end
+
+end
+hello = HelloWorldClass.new("{type your name here}")
+hello.sayHi
+
+# Part2: Palindrome
+puts "Part2"
+def palindrome?(string)
+	string = string.downcase.scan(/\w/)
+	if string == string.reverse
+		then return true
+	end
+end
+palindrome?("A man, a plan, a canal -- Panama") 
+
+# Part 3:RPS
+
