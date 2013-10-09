@@ -8,8 +8,6 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.ratings
-
-    # If there are parameters add them to the session
     if params[:sort]
       session[:sort] = params[:sort]
     end
@@ -32,12 +30,6 @@ class MoviesController < ApplicationController
       else
         @ratings = session[:ratings]
       end
-    end
-
-    if session[:sort] == 'title'
-      @title_header = 'hilite'
-    elsif session[:sort] == 'release_date DESC'
-      @release_date_header = 'hilite'
     end
 
     @movies = Movie.where(:rating => @ratings).order(@sort)
